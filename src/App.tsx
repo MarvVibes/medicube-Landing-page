@@ -50,6 +50,7 @@ export default function App() {
   const [showPopup, setShowPopup] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [recentSale, setRecentSale] = useState<{ name: string; location: string } | null>(null);
+  const [isOrdered, setIsOrdered] = useState(false);
 
   useEffect(() => {
     // Show popup after 20 seconds
@@ -100,32 +101,38 @@ export default function App() {
     document.getElementById('order')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    setIsMenuOpen(false);
+  };
+
   return (
     <div className="min-h-screen flex flex-col overflow-x-hidden">
       {/* Navigation */}
       <nav className="glass-nav">
-        <div className="max-w-7xl mx-auto px-8 md:px-16 h-20 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 md:px-16 h-20 flex items-center justify-between">
           <span className="text-xl font-extrabold tracking-tighter text-zinc-900 uppercase font-headline">
             Medicube
           </span>
           
           <div className="hidden md:flex gap-8 items-center">
-            <a href="#" className="text-emerald-700 border-b-2 border-emerald-700 pb-1 font-bold tracking-tight font-headline">PDRN Tech</a>
-            <a href="#" className="text-zinc-600 hover:text-zinc-900 transition-colors font-bold tracking-tight font-headline">Clinical Results</a>
-            <a href="#" className="text-zinc-600 hover:text-zinc-900 transition-colors font-bold tracking-tight font-headline">Reviews</a>
-            <a href="#" className="text-zinc-600 hover:text-zinc-900 transition-colors font-bold tracking-tight font-headline">Ingredients</a>
+            <button onClick={() => scrollToSection('tech')} className="text-emerald-700 border-b-2 border-emerald-700 pb-1 font-bold tracking-tight font-headline hover:opacity-80 transition-opacity">PDRN Tech</button>
+            <button onClick={() => scrollToSection('results')} className="text-zinc-600 hover:text-zinc-900 transition-colors font-bold tracking-tight font-headline">Clinical Results</button>
+            <button onClick={() => scrollToSection('reviews')} className="text-zinc-600 hover:text-zinc-900 transition-colors font-bold tracking-tight font-headline">Reviews</button>
+            <button onClick={() => scrollToSection('ingredients')} className="text-zinc-600 hover:text-zinc-900 transition-colors font-bold tracking-tight font-headline">Ingredients</button>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <button 
               onClick={scrollToOrder}
-              className="bg-secondary text-on-secondary px-8 py-3 rounded-xl font-bold hover:opacity-90 transition-all duration-300 active:scale-95 hidden sm:block"
+              className="bg-secondary text-on-secondary px-4 py-2 sm:px-8 sm:py-3 rounded-xl font-bold text-sm sm:text-base hover:opacity-90 transition-all duration-300 active:scale-95"
             >
               Order Now
             </button>
             <button 
-              className="md:hidden text-zinc-900"
+              className="md:hidden text-zinc-900 p-2 hover:bg-zinc-100 rounded-lg transition-colors"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -139,10 +146,10 @@ export default function App() {
             animate={{ opacity: 1, y: 0 }}
             className="md:hidden bg-white border-b border-zinc-100 p-6 flex flex-col gap-4"
           >
-            <a href="#" className="font-bold text-emerald-700">PDRN Tech</a>
-            <a href="#" className="font-bold text-zinc-600">Clinical Results</a>
-            <a href="#" className="font-bold text-zinc-600">Reviews</a>
-            <a href="#" className="font-bold text-zinc-600">Ingredients</a>
+            <button onClick={() => scrollToSection('tech')} className="font-bold text-emerald-700 text-left">PDRN Tech</button>
+            <button onClick={() => scrollToSection('results')} className="font-bold text-zinc-600 text-left">Clinical Results</button>
+            <button onClick={() => scrollToSection('reviews')} className="font-bold text-zinc-600 text-left">Reviews</button>
+            <button onClick={() => scrollToSection('ingredients')} className="font-bold text-zinc-600 text-left">Ingredients</button>
             <button 
               onClick={() => { scrollToOrder(); setIsMenuOpen(false); }}
               className="bg-secondary text-on-secondary w-full py-4 rounded-xl font-bold"
@@ -297,7 +304,7 @@ export default function App() {
         </section>
 
         {/* Solution Section */}
-        <section className="py-24 bg-primary-container/10">
+        <section className="py-24 bg-primary-container/10" id="tech">
           <div className="max-w-7xl mx-auto px-8 md:px-16 text-center mb-16">
             <h2 className="text-4xl font-headline font-bold text-zinc-900 mb-4 tracking-tight">The DNA Transformation</h2>
             <p className="text-on-surface-variant max-w-2xl mx-auto text-lg">Our proprietary PDRN (Salmon DNA) complex works at the cellular level to repair and regenerate your skin from within.</p>
@@ -418,7 +425,7 @@ export default function App() {
         </section>
 
         {/* Before & After Grid */}
-        <section className="py-24 bg-white">
+        <section className="py-24 bg-white" id="results">
           <div className="max-w-7xl mx-auto px-8 md:px-16">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-headline font-bold text-zinc-900 tracking-tight">Real Transformations</h2>
@@ -497,7 +504,7 @@ export default function App() {
         </section>
 
         {/* Testimonials */}
-        <section className="py-24 bg-white">
+        <section className="py-24 bg-white" id="reviews">
           <div className="max-w-7xl mx-auto px-8 md:px-16">
             <div className="flex flex-col md:flex-row items-center justify-between mb-12 gap-6">
               <h2 className="text-4xl font-headline font-bold text-zinc-900 tracking-tight">Loved by 10,000+ Women</h2>
@@ -549,7 +556,7 @@ export default function App() {
         </section>
 
         {/* Product Showcase */}
-        <section className="py-24 bg-surface-container-low overflow-hidden">
+        <section className="py-24 bg-surface-container-low overflow-hidden" id="ingredients">
           <div className="max-w-7xl mx-auto px-8 md:px-16">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className="space-y-8">
@@ -635,9 +642,24 @@ export default function App() {
                     </div>
                   ))}
                 </div>
-                <button className="w-full bg-secondary text-on-secondary text-xl md:text-2xl py-5 md:py-6 rounded-2xl font-black hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-secondary/20">
-                  CLICK TO ORDER NOW
-                </button>
+                {!isOrdered ? (
+                  <button 
+                    onClick={() => setIsOrdered(true)}
+                    className="w-full bg-secondary text-on-secondary text-xl md:text-2xl py-5 md:py-6 rounded-2xl font-black hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-secondary/20"
+                  >
+                    CLICK TO ORDER NOW
+                  </button>
+                ) : (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="bg-emerald-50 border-2 border-emerald-500 p-6 rounded-2xl text-center"
+                  >
+                    <CheckCircle2 size={48} className="text-emerald-500 mx-auto mb-4" />
+                    <h3 className="text-2xl font-black text-zinc-900 mb-2">Order Received!</h3>
+                    <p className="text-zinc-600">Our team will contact you shortly to confirm your delivery details.</p>
+                  </motion.div>
+                )}
                 <p className="text-xs md:text-sm text-on-surface-variant flex items-center justify-center gap-2">
                   <Lock size={14} />
                   Safe & Secure Checkout
@@ -738,14 +760,14 @@ export default function App() {
 
       {/* Footer */}
       <footer className="bg-white py-16 border-t border-zinc-100">
-        <div className="max-w-7xl mx-auto px-8 md:px-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="max-w-7xl mx-auto px-8 md:px-16 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center text-center md:text-left">
           <div className="space-y-4">
             <span className="text-lg font-bold text-zinc-900 font-headline uppercase tracking-tighter">Medicube</span>
-            <p className="text-sm leading-relaxed text-zinc-500">
-              © 2024 Medicube. Advanced PDRN Clinical Skincare.
+            <p className="text-sm leading-relaxed text-zinc-500 max-w-md mx-auto md:mx-0">
+              built by Marvelous Ndukwe @2026 al rights reserved, @Kanimart store, your trusted online store
             </p>
           </div>
-          <div className="flex flex-wrap gap-x-8 gap-y-4 justify-end">
+          <div className="flex flex-wrap gap-x-8 gap-y-4 justify-center md:justify-end">
             {["Privacy Policy", "Terms of Service", "Shipping Info", "Contact Us", "Store Locator"].map((link, i) => (
               <a key={i} className="text-sm text-zinc-500 hover:text-emerald-600 transition-colors hover:underline decoration-emerald-500/30 underline-offset-4" href="#">{link}</a>
             ))}
