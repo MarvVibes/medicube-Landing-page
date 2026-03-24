@@ -49,7 +49,7 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
-  const [recentSale, setRecentSale] = useState<{ name: string; location: string } | null>(null);
+  const [recentSale, setRecentSale] = useState<{ name: string; location: string; count: number; time: string } | null>(null);
   const [isOrdered, setIsOrdered] = useState(false);
 
   useEffect(() => {
@@ -90,7 +90,11 @@ export default function App() {
 
     const interval = setInterval(() => {
       const randomSale = sales[Math.floor(Math.random() * sales.length)];
-      setRecentSale(randomSale);
+      const randomCount = Math.floor(Math.random() * 3) + 1; // 1, 2, or 3 bottles
+      const times = ["Just now", "2 minutes ago", "5 minutes ago", "1 minute ago"];
+      const randomTime = times[Math.floor(Math.random() * times.length)];
+      
+      setRecentSale({ ...randomSale, count: randomCount, time: randomTime });
       setTimeout(() => setRecentSale(null), 5000);
     }, 15000);
 
@@ -864,7 +868,7 @@ export default function App() {
             </div>
             <div>
               <p className="text-sm font-bold text-zinc-900">{recentSale.name} from {recentSale.location}</p>
-              <p className="text-xs text-on-surface-variant">Just purchased 2 bottles! 🛍️</p>
+              <p className="text-xs text-on-surface-variant">Purchased {recentSale.count} {recentSale.count === 1 ? 'bottle' : 'bottles'}! • {recentSale.time} 🛍️</p>
             </div>
           </motion.div>
         )}
